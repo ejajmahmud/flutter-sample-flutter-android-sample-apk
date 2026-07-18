@@ -1,0 +1,19 @@
+stages:          # List of stages for jobs, and their order of executionfmnn.
+  - main-bundle-deploy
+
+
+main-build:       # This job runs in the build stage, which runs first.
+  stage: main-build-deploy
+  script:
+    #- export PATH="$PATH:'pwd'/flutter/bin"
+    - echo "Compiling the code..."
+    - flutter pub get
+    - flutter build appbundle 
+    - echo "Build complete."
+    - aws s3 cp build/app/outputs/bundle/release/app.aab s3://sample-flutter-apk
+  artifacts:
+        paths:
+            - build/app/outputs/bundle/release/app.aab
+  only:
+    - main
+
